@@ -1,4 +1,5 @@
 {
+  "outputDirectory": "public",
   "regions": ["iad1"],
   "functions": {
     "api/**/*.js": {
