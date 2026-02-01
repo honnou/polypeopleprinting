@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "outputDirectory": "public",
   "regions": ["iad1"],
   "builds": [
+    { "src": "public/**", "use": "@vercel/static" },
     { "src": "api/**/*.js", "use": "@vercel/node" }
   ],
   "headers": [
