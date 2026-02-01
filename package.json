@@ -1,0 +1,9 @@
+{
+  "name": "polypeopleprinting",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Poly People Printing — static site with Vercel serverless webhooks",
+  "scripts": {
+    "dev": "vercel dev"
+  }
+}
