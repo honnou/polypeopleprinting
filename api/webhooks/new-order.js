@@ -4,37 +4,46 @@ const https = require("https");
 // ---------------------------------------------------------------------------
 // Config
 // ---------------------------------------------------------------------------
-const VALID_ORDER_TYPES = [
-  "custom-print",
-  "miniature",
-  "prototype",
-  "bulk-order",
-  "repair",
-  "other",
+const VALID_SERVICES = [
+  "3d-printing",
+  "dtf-transfers",
+  "laser-services",
+  "sublimation",
 ];
 
-const REQUIRED_FIELDS = [
-  "name",
-  "email",
-  "phone",
-  "orderType",
-  "material",
-  "description",
-];
+const VALID_TIMELINES = ["rush", "standard", "flexible", "ongoing"];
+
+const REQUIRED_FIELDS = ["service", "firstName", "lastName", "email", "phone", "quantity", "timeline"];
 
 const OPTIONAL_FIELDS = [
-  "quantity",
-  "color",
-  "deadline",
-  "shippingAddress",
-  "message",
+  "dimensions",
+  "materials",
+  "budget",
+  "description",
+  "referral",
+  "contactMethod",
+  "newsletter",
 ];
 
 const MAX_BODY_BYTES = 50_000; // 50 KB
 const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
 const RATE_LIMIT_MAX = 10; // requests per window
 
-const EMBED_COLOR = 0x7c3aed; // purple — brand-appropriate for 3-D printing
+const EMBED_COLOR = 0x7c3aed; // purple
+
+const SERVICE_LABELS = {
+  "3d-printing": "3D Printing",
+  "dtf-transfers": "DTF Transfers",
+  "laser-services": "Laser Services",
+  "sublimation": "Sublimation",
+};
+
+const TIMELINE_LABELS = {
+  rush: "Rush (3-5 days)",
+  standard: "Standard (1-2 weeks)",
+  flexible: "Flexible (2+ weeks)",
+  ongoing: "Ongoing/Multiple Orders",
+};
 
 // ---------------------------------------------------------------------------
 // Simple in-memory rate limiter (per-IP, resets on cold start)
@@ -116,34 +125,40 @@ function postJSON(url, body) {
 // ---------------------------------------------------------------------------
 function buildEmbed(data) {
   const fields = [
-    { name: "Name", value: sanitize(data.name), inline: true },
+    { name: "Name", value: sanitize(`${data.firstName} ${data.lastName}`), inline: true },
     { name: "Email", value: sanitize(data.email), inline: true },
     { name: "Phone", value: sanitize(data.phone), inline: true },
-    { name: "Order Type", value: sanitize(data.orderType), inline: true },
-    { name: "Material", value: sanitize(data.material), inline: true },
+    { name: "Service", value: SERVICE_LABELS[data.service] || sanitize(data.service), inline: true },
+    { name: "Quantity", value: sanitize(String(data.quantity)), inline: true },
+    { name: "Timeline", value: TIMELINE_LABELS[data.timeline] || sanitize(data.timeline), inline: true },
   ];
 
-  for (const key of OPTIONAL_FIELDS) {
-    if (data[key] !== undefined && data[key] !== null && data[key] !== "") {
-      const label = key.replace(/([A-Z])/g, " $1").replace(/^./, (c) => c.toUpperCase());
-      fields.push({
-        name: label,
-        value: sanitize(data[key]),
-        inline: key !== "shippingAddress" && key !== "message",
-      });
-    }
+  if (data.dimensions) {
+    fields.push({ name: "Dimensions", value: sanitize(data.dimensions), inline: true });
   }
-
-  fields.push({
-    name: "Description",
-    value: sanitize(data.description),
-    inline: false,
-  });
+  if (data.materials) {
+    fields.push({ name: "Material/Color", value: sanitize(data.materials), inline: true });
+  }
+  if (data.budget) {
+    fields.push({ name: "Budget", value: sanitize(data.budget), inline: true });
+  }
+  if (data.contactMethod) {
+    fields.push({ name: "Preferred Contact", value: sanitize(data.contactMethod), inline: true });
+  }
+  if (data.referral) {
+    fields.push({ name: "Referral Source", value: sanitize(data.referral), inline: true });
+  }
+  if (data.newsletter) {
+    fields.push({ name: "Newsletter", value: "Yes", inline: true });
+  }
+  if (data.description) {
+    fields.push({ name: "Description", value: sanitize(data.description), inline: false });
+  }
 
   return {
     embeds: [
       {
-        title: "New Order Request",
+        title: "New Quote Request",
         color: EMBED_COLOR,
         fields,
         timestamp: new Date().toISOString(),
@@ -222,9 +237,15 @@ module.exports = async function handler(req, res) {
       .json({ error: `Missing required fields: ${missing.join(", ")}` });
   }
 
-  if (!VALID_ORDER_TYPES.includes(data.orderType)) {
+  if (!VALID_SERVICES.includes(data.service)) {
     return res.status(400).json({
-      error: `Invalid orderType. Must be one of: ${VALID_ORDER_TYPES.join(", ")}`,
+      error: `Invalid service. Must be one of: ${VALID_SERVICES.join(", ")}`,
+    });
+  }
+
+  if (!VALID_TIMELINES.includes(data.timeline)) {
+    return res.status(400).json({
+      error: `Invalid timeline. Must be one of: ${VALID_TIMELINES.join(", ")}`,
     });
   }
 
