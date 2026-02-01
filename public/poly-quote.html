@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Request a custom quote for 3D printing, DTF transfers, laser cutting, or sublimation services. Fast turnaround and competitive pricing.">
+    <title>Get a Quote - Poly People Printing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        a:focus, button:focus, input:focus, textarea:focus, select:focus, label:focus {
+            outline: 3px solid #fbbf24 !important;
+            outline-offset: 2px !important;
+        }
+        
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #fbbf24;
+            color: #000;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+            font-weight: bold;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .error-message {
+            color: #fca5a5;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .error-message.show {
+            display: block;
+        }
+        
+        input:invalid:not(:focus):not(:placeholder-shown),
+        select:invalid:not(:focus):not(:placeholder-shown),
+        textarea:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900 min-h-screen">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav role="navigation" aria-label="Main navigation" class="relative z-50 bg-white/10 backdrop-blur-md border-b-2 border-white/20">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-white" style="font-family: 'Fredoka', cursive;">
+                <a href="index.html" class="hover:text-yellow-300 transition-colors" aria-label="Poly People Printing home page">
+                    <span role="img" aria-label="Corgi mascot">🐕</span> Poly People Printing
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Home</a>
+                <a href="poly-services.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Services</a>
+                <a href="poly-gallery.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Gallery</a>
+                <a href="poly-quote.html" class="text-yellow-300 font-semibold" style="font-family: 'Quicksand', sans-serif;" aria-current="page">Get Quote</a>
+                <a href="poly-contact.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main" class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <header class="text-center mb-12">
+                <h1 class="text-6xl font-black text-white mb-4" style="font-family: 'Fredoka', cursive; text-shadow: 0 0 30px rgba(255,255,255,0.6);">
+                    Get Your Quote
+                </h1>
+                <p class="text-xl text-purple-100" style="font-family: 'Quicksand', sans-serif;">
+                    Tell us about your project and we'll get back to you within 24 hours!
+                </p>
+            </header>
+
+            <!-- Progress Bar -->
+            <div class="mb-8" role="region" aria-label="Form progress">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="step1-label" class="step-label text-sm font-bold text-yellow-300" style="font-family: 'Quicksand', sans-serif;">Step 1: Service Type</span>
+                    <span id="step2-label" class="step-label text-sm font-bold text-purple-300" style="font-family: 'Quicksand', sans-serif;">Step 2: Project Details</span>
+                    <span id="step3-label" class="step-label text-sm font-bold text-purple-300" style="font-family: 'Quicksand', sans-serif;">Step 3: Files & Notes</span>
+                    <span id="step4-label" class="step-label text-sm font-bold text-purple-300" style="font-family: 'Quicksand', sans-serif;">Step 4: Contact Info</span>
+                </div>
+                <div class="relative h-4 bg-white/20 rounded-full overflow-hidden">
+                    <div id="progressBar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 transition-all duration-500 rounded-full" style="width: 25%;" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="Form completion progress"></div>
+                </div>
+                <div class="sr-only" aria-live="polite" aria-atomic="true" id="progress-announce"></div>
+            </div>
+
+            <!-- Quote Form -->
+            <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-white/20">
+                <form id="quoteForm" novalidate aria-labelledby="form-title">
+                    <h2 id="form-title" class="sr-only">Quote Request Form</h2>
+                    
+                    <!-- Step 1: Service Selection -->
+                    <fieldset class="form-step active" id="step1">
+                        <legend class="text-3xl font-black text-white mb-6" style="font-family: 'Fredoka', cursive;">
+                            What service do you need?
+                        </legend>
+                        <p class="text-purple-100 mb-4" style="font-family: 'Quicksand', sans-serif;">Required field - Please select one service</p>
+                        <div class="grid md:grid-cols-2 gap-4" role="radiogroup" aria-required="true" aria-labelledby="service-legend">
+                            <span id="service-legend" class="sr-only">Select a service type</span>
+                            
+                            <label class="service-option cursor-pointer">
+                                <input type="radio" name="service" value="3d-printing" class="sr-only service-radio" required aria-label="3D Printing - Custom parts, prototypes, figurines">
+                                <div class="service-card bg-white/10 border-4 border-transparent hover:border-blue-400 rounded-2xl p-6 transition-all duration-300 transform hover:scale-105">
+                                    <div class="text-6xl mb-3" role="img" aria-hidden="true">🖨️</div>
+                                    <h3 class="text-2xl font-bold text-white mb-2" style="font-family: 'Fredoka', cursive;">3D Printing</h3>
+                                    <p class="text-purple-100 text-sm" style="font-family: 'Quicksand', sans-serif;">Custom parts, prototypes, figurines</p>
+                                </div>
+                            </label>
+
+                            <label class="service-option cursor-pointer">
+                                <input type="radio" name="service" value="dtf-transfers" class="sr-only service-radio" required aria-label="DTF Transfers - Vibrant apparel and fabric printing">
+                                <div class="service-card bg-white/10 border-4 border-transparent hover:border-pink-400 rounded-2xl p-6 transition-all duration-300 transform hover:scale-105">
+                                    <div class="text-6xl mb-3" role="img" aria-hidden="true">👕</div>
+                                    <h3 class="text-2xl font-bold text-white mb-2" style="font-family: 'Fredoka', cursive;">DTF Transfers</h3>
+                                    <p class="text-purple-100 text-sm" style="font-family: 'Quicksand', sans-serif;">Vibrant apparel & fabric printing</p>
+                                </div>
+                            </label>
+
+                            <label class="service-option cursor-pointer">
+                                <input type="radio" name="service" value="laser-services" class="sr-only service-radio" required aria-label="Laser Services - Cutting and engraving on various materials">
+                                <div class="service-card bg-white/10 border-4 border-transparent hover:border-green-400 rounded-2xl p-6 transition-all duration-300 transform hover:scale-105">
+                                    <div class="text-6xl mb-3" role="img" aria-hidden="true">✂️</div>
+                                    <h3 class="text-2xl font-bold text-white mb-2" style="font-family: 'Fredoka', cursive;">Laser Services</h3>
+                                    <p class="text-purple-100 text-sm" style="font-family: 'Quicksand', sans-serif;">Cutting & engraving on various materials</p>
+                                </div>
+                            </label>
+
+                            <label class="service-option cursor-pointer">
+                                <input type="radio" name="service" value="sublimation" class="sr-only service-radio" required aria-label="Sublimation - Mugs, tumblers, polyester items">
+                                <div class="service-card bg-white/10 border-4 border-transparent hover:border-yellow-400 rounded-2xl p-6 transition-all duration-300 transform hover:scale-105">
+                                    <div class="text-6xl mb-3" role="img" aria-hidden="true">🎨</div>
+                                    <h3 class="text-2xl font-bold text-white mb-2" style="font-family: 'Fredoka', cursive;">Sublimation</h3>
+                                    <p class="text-purple-100 text-sm" style="font-family: 'Quicksand', sans-serif;">Mugs, tumblers, polyester items</p>
+                                </div>
+                            </label>
+                        </div>
+                        <div id="service-error" class="error-message" role="alert">Please select a service before continuing</div>
+                    </fieldset>
+
+                    <!-- Step 2: Project Details -->
+                    <fieldset class="form-step" id="step2">
+                        <legend class="text-3xl font-black text-white mb-6" style="font-family: 'Fredoka', cursive;">
+                            Tell us about your project
+                        </legend>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label for="quantity" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">
+                                    Quantity Needed <span class="text-yellow-300">(required)</span>
+                                </label>
+                                <input type="number" id="quantity" name="quantity" min="1" required class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none" placeholder="How many do you need?" aria-required="true" aria-describedby="quantity-error">
+                                <div id="quantity-error" class="error-message" role="alert">Please enter the quantity you need</div>
+                            </div>
+
+                            <div>
+                                <label for="timeline" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">
+                                    Project Timeline <span class="text-yellow-300">(required)</span>
+                                </label>
+                                <select id="timeline" name="timeline" required class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white focus:border-yellow-400 focus:outline-none" aria-required="true" aria-describedby="timeline-error">
+                                    <option value="" disabled selected>When do you need it?</option>
+                                    <option value="rush">Rush (3-5 days) - May incur rush fees</option>
+                                    <option value="standard">Standard (1-2 weeks)</option>
+                                    <option value="flexible">Flexible (2+ weeks)</option>
+                                    <option value="ongoing">Ongoing/Multiple Orders</option>
+                                </select>
+                                <div id="timeline-error" class="error-message" role="alert">Please select a timeline for your project</div>
+                            </div>
+
+                            <div>
+                                <label for="dimensions" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">Dimensions/Size</label>
+                                <input type="text" id="dimensions" name="dimensions" class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none" placeholder="e.g., 6 inches tall, Small/Medium/Large, 12x12 inches" aria-describedby="dimensions-hint">
+                                <p id="dimensions-hint" class="text-sm text-purple-200 mt-1">Optional - helps us provide accurate pricing</p>
+                            </div>
+
+                            <div>
+                                <label for="materials" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">Material/Color Preferences</label>
+                                <input type="text" id="materials" name="materials" class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none" placeholder="e.g., Blue PLA, White cotton shirt, Bamboo wood">
+                            </div>
+
+                            <div>
+                                <label for="budget" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">Budget Range (Optional)</label>
+                                <select id="budget" name="budget" class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white focus:border-yellow-400 focus:outline-none">
+                                    <option value="">Select a range (helps us provide options)</option>
+                                    <option value="under-50">Under $50</option>
+                                    <option value="50-150">$50 - $150</option>
+                                    <option value="150-300">$150 - $300</option>
+                                    <option value="300-500">$300 - $500</option>
+                                    <option value="500-plus">$500+</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Step 3: Files & Additional Info -->
+                    <fieldset class="form-step" id="step3">
+                        <legend class="text-3xl font-black text-white mb-6" style="font-family: 'Fredoka', cursive;">
+                            Files & Additional Details
+                        </legend>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label for="fileUpload" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">
+                                    Upload Design Files
+                                    <span class="text-sm font-normal text-purple-200">(Optional - can also send via email later)</span>
+                                </label>
+                                <div class="border-4 border-dashed border-white/30 rounded-2xl p-8 text-center hover:border-yellow-400 transition-colors cursor-pointer bg-white/5">
+                                    <input type="file" name="files" multiple class="sr-only" id="fileUpload" accept=".stl,.obj,.png,.jpg,.jpeg,.pdf,.ai,.svg" aria-describedby="file-instructions">
+                                    <label for="fileUpload" class="cursor-pointer block">
+                                        <div class="text-6xl mb-4" role="img" aria-label="File folder icon">📁</div>
+                                        <p id="file-instructions" class="text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">Click to upload or drag files here</p>
+                                        <p class="text-sm text-purple-200">Accepted: STL, OBJ, PNG, JPG, PDF, AI, SVG</p>
+                                    </label>
+                                </div>
+                                <div id="fileList" class="mt-4 space-y-2" aria-live="polite" aria-atomic="false"></div>
+                            </div>
+
+                            <div>
+                                <label for="description" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">Project Description</label>
+                                <textarea id="description" name="description" rows="6" class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none resize-none" placeholder="Tell us more about what you're looking to create! Include any special requirements, finishing options, or questions you have." aria-describedby="description-hint"></textarea>
+                                <p id="description-hint" class="text-sm text-purple-200 mt-1">Optional - but helpful for providing accurate quotes</p>
+                            </div>
+
+                            <div>
+                                <label for="referral" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">How did you hear about us?</label>
+                                <select id="referral" name="referral" class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white focus:border-yellow-400 focus:outline-none">
+                                    <option value="">Select one</option>
+                                    <option value="social-media">Social Media</option>
+                                    <option value="search-engine">Google/Search Engine</option>
+                                    <option value="friend-referral">Friend or Family</option>
+                                    <option value="local-business">Local Business/Event</option>
+                                    <option value="online-marketplace">Online Marketplace</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Step 4: Contact Information -->
+                    <fieldset class="form-step" id="step4">
+                        <legend class="text-3xl font-black text-white mb-6" style="font-family: 'Fredoka', cursive;">
+                            Your Contact Information
+                        </legend>
+
+                        <div class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="firstName" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">
+                                        First Name <span class="text-yellow-300">*</span>
+                                    </label>
+                                    <input type="text" id="firstName" name="firstName" required class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none" placeholder="John" aria-required="true" aria-describedby="firstName-error">
+                                    <div id="firstName-error" class="error-message" role="alert">Please enter your first name</div>
+                                </div>
+                                <div>
+                                    <label for="lastName" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">
+                                        Last Name <span class="text-yellow-300">*</span>
+                                    </label>
+                                    <input type="text" id="lastName" name="lastName" required class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none" placeholder="Doe" aria-required="true" aria-describedby="lastName-error">
+                                    <div id="lastName-error" class="error-message" role="alert">Please enter your last name</div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">
+                                    Email Address <span class="text-yellow-300">*</span>
+                                </label>
+                                <input type="email" id="email" name="email" required class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none" placeholder="your.email@example.com" aria-required="true" aria-describedby="email-error">
+                                <div id="email-error" class="error-message" role="alert">Please enter a valid email address</div>
+                            </div>
+
+                            <div>
+                                <label for="phone" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">
+                                    Phone Number <span class="text-yellow-300">*</span>
+                                </label>
+                                <input type="tel" id="phone" name="phone" required class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-purple-300 focus:border-yellow-400 focus:outline-none" placeholder="(555) 123-4567" aria-required="true" aria-describedby="phone-error">
+                                <div id="phone-error" class="error-message" role="alert">Please enter your phone number</div>
+                            </div>
+
+                            <div>
+                                <label for="contactMethod" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">Preferred Contact Method</label>
+                                <select id="contactMethod" name="contactMethod" class="w-full bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white focus:border-yellow-400 focus:outline-none">
+                                    <option value="email">Email</option>
+                                    <option value="phone">Phone Call</option>
+                                    <option value="text">Text Message</option>
+                                </select>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl p-6">
+                                <label class="flex items-start cursor-pointer">
+                                    <input type="checkbox" id="newsletter" name="newsletter" class="mt-1 mr-3 w-5 h-5 rounded border-2 border-white/30">
+                                    <span for="newsletter" class="text-white text-sm" style="font-family: 'Quicksand', sans-serif;">
+                                        Yes! Send me updates about new products, special offers, and creative inspiration from Poly People Printing
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between mt-8">
+                        <button type="button" id="prevBtn" class="bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 border-2 border-white/30" style="font-family: 'Fredoka', cursive; display: none;" aria-label="Go to previous step">
+                            ← Previous
+                        </button>
+                        <button type="button" id="nextBtn" class="ml-auto bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105" style="font-family: 'Fredoka', cursive;" aria-label="Go to next step">
+                            Next Step →
+                        </button>
+                        <button type="submit" id="submitBtn" class="ml-auto bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105" style="font-family: 'Fredoka', cursive; display: none;" aria-label="Submit quote request">
+                            Submit Quote Request ✨
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Success Message (hidden initially) -->
+                <div id="successMessage" class="hidden text-center py-12" role="alert" aria-live="polite">
+                    <div class="text-8xl mb-6" role="img" aria-label="Party celebration emoji">🎉</div>
+                    <h2 class="text-4xl font-black text-white mb-4" style="font-family: 'Fredoka', cursive;">
+                        Quote Request Received!
+                    </h2>
+                    <p class="text-xl text-purple-100 mb-6" style="font-family: 'Quicksand', sans-serif;">
+                        We'll review your project and get back to you within 24 hours.
+                    </p>
+                    <p class="text-lg text-white" style="font-family: 'Quicksand', sans-serif;">
+                        Check your email for a confirmation with your quote request details.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer role="contentinfo" class="bg-black/30 backdrop-blur-md border-t-2 border-white/20 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-white text-lg mb-2" style="font-family: 'Fredoka', cursive;">
+                <span role="img" aria-label="Rainbow">🌈</span> Poly People Printing - Punderful Perfection <span role="img" aria-label="Rainbow">🌈</span>
+            </p>
+            <p class="text-purple-200" style="font-family: 'Quicksand', sans-serif;">
+                © 2026 Poly People Printing. All rights reserved.
+            </p>
+            <p class="text-purple-300 text-sm mt-2">
+                <a href="poly-accessibility.html" class="hover:text-yellow-300 underline">Accessibility Statement</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // Service card selection with accessibility
+        document.querySelectorAll('.service-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.service-card').forEach(card => {
+                    card.style.borderColor = 'transparent';
+                });
+                this.querySelector('.service-card').style.borderColor = '#fbbf24';
+                this.querySelector('.service-radio').checked = true;
+                document.getElementById('service-error').classList.remove('show');
+            });
+            
+            // Keyboard support
+            option.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
+
+        // File upload handling with accessibility
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            
+            if (e.target.files.length > 0) {
+                const announcement = `${e.target.files.length} file${e.target.files.length > 1 ? 's' : ''} selected`;
+                announceToScreenReader(announcement);
+            }
+            
+            Array.from(e.target.files).forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'bg-white/20 rounded-lg px-4 py-2 text-white text-sm flex items-center justify-between';
+                fileItem.innerHTML = `
+                    <span><span role="img" aria-label="File attachment">📎</span> ${file.name}</span>
+                    <span class="text-xs text-purple-200">${(file.size / 1024).toFixed(1)} KB</span>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        });
+
+        // Step navigation
+        function showStep(step) {
+            document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + step).classList.add('active');
+            
+            // Update progress bar
+            const progress = (step / totalSteps) * 100;
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', progress);
+            
+            // Announce progress to screen readers
+            const announcement = `Step ${step} of ${totalSteps}`;
+            announceToScreenReader(announcement);
+            
+            // Update step labels
+            for (let i = 1; i <= totalSteps; i++) {
+                const label = document.getElementById(`step${i}-label`);
+                if (i < step) {
+                    label.style.color = '#22c55e'; // green - completed
+                } else if (i === step) {
+                    label.style.color = '#fbbf24'; // yellow - current
+                } else {
+                    label.style.color = '#c084fc'; // purple - upcoming
+                }
+            }
+            
+            // Show/hide buttons
+            document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'block';
+            document.getElementById('nextBtn').style.display = step === totalSteps ? 'none' : 'block';
+            document.getElementById('submitBtn').style.display = step === totalSteps ? 'block' : 'none';
+            
+            // Focus management - move focus to first interactive element
+            const currentStepElement = document.getElementById('step' + step);
+            const firstInteractive = currentStepElement.querySelector('input, select, textarea, button');
+            if (firstInteractive) {
+                firstInteractive.focus();
+            }
+        }
+
+        // Form validation
+        function validateStep(step) {
+            let isValid = true;
+            const currentStepElement = document.getElementById('step' + step);
+            
+            if (step === 1) {
+                const serviceSelected = document.querySelector('input[name="service"]:checked');
+                if (!serviceSelected) {
+                    document.getElementById('service-error').classList.add('show');
+                    announceToScreenReader('Error: Please select a service before continuing');
+                    isValid = false;
+                }
+            } else if (step === 2) {
+                const quantity = document.getElementById('quantity');
+                const timeline = document.getElementById('timeline');
+                
+                if (!quantity.value || quantity.value < 1) {
+                    document.getElementById('quantity-error').classList.add('show');
+                    isValid = false;
+                }
+                if (!timeline.value) {
+                    document.getElementById('timeline-error').classList.add('show');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    announceToScreenReader('Error: Please fill in all required fields');
+                }
+            } else if (step === 4) {
+                const requiredFields = ['firstName', 'lastName', 'email', 'phone'];
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value) {
+                        document.getElementById(fieldId + '-error').classList.add('show');
+                        isValid = false;
+                    }
+                });
+                
+                if (!isValid) {
+                    announceToScreenReader('Error: Please fill in all required contact information');
+                }
+            }
+            
+            return isValid;
+        }
+
+        // Screen reader announcements
+        function announceToScreenReader(message) {
+            const announcer = document.getElementById('progress-announce');
+            announcer.textContent = message;
+            setTimeout(() => {
+                announcer.textContent = '';
+            }, 1000);
+        }
+
+        // Next button
+        document.getElementById('nextBtn').addEventListener('click', function() {
+            if (currentStep < totalSteps) {
+                if (validateStep(currentStep)) {
+                    currentStep++;
+                    showStep(currentStep);
+                }
+            }
+        });
+
+        // Previous button
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        });
+
+        // Form submission
+        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            
+            // Hide form, show success message
+            this.style.display = 'none';
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.remove('hidden');
+            successMessage.focus();
+            
+            // Announce success
+            announceToScreenReader('Quote request submitted successfully! We will contact you within 24 hours.');
+            
+            // In production, submit to backend
+            console.log('Form submitted!', new FormData(this));
+        });
+
+        // Clear error messages on input
+        document.querySelectorAll('input, select, textarea').forEach(field => {
+            field.addEventListener('input', function() {
+                const errorDiv = document.getElementById(this.id + '-error');
+                if (errorDiv) {
+                    errorDiv.classList.remove('show');
+                }
+            });
+        });
+
+        // Initialize
+        showStep(1);
+    </script>
+</body>
+</html>
