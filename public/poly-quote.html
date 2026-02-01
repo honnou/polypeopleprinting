@@ -520,24 +520,51 @@
         });
 
         // Form submission
-        document.getElementById('quoteForm').addEventListener('submit', function(e) {
+        document.getElementById('quoteForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             if (!validateStep(currentStep)) {
                 return;
             }
-            
-            // Hide form, show success message
-            this.style.display = 'none';
-            const successMessage = document.getElementById('successMessage');
-            successMessage.classList.remove('hidden');
-            successMessage.focus();
-            
-            // Announce success
-            announceToScreenReader('Quote request submitted successfully! We will contact you within 24 hours.');
-            
-            // In production, submit to backend
-            console.log('Form submitted!', new FormData(this));
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                if (key === 'files') return; // skip file inputs
+                data[key] = value;
+            });
+            // Convert newsletter checkbox to boolean
+            data.newsletter = formData.has('newsletter');
+
+            try {
+                const res = await fetch('/api/webhooks/new-order.js', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.error || 'Submission failed');
+                }
+
+                // Hide form, show success message
+                this.style.display = 'none';
+                document.querySelector('.flex.justify-between.mt-8').style.display = 'none';
+                const successMessage = document.getElementById('successMessage');
+                successMessage.classList.remove('hidden');
+                successMessage.focus();
+                announceToScreenReader('Quote request submitted successfully! We will contact you within 24 hours.');
+            } catch (err) {
+                announceToScreenReader('Error submitting form. Please try again.');
+                alert('Something went wrong: ' + err.message + '. Please try again or contact us directly.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Quote Request ✨';
+            }
         });
 
         // Clear error messages on input
