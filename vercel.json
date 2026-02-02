@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "outputDirectory": "public",
   "regions": ["iad1"],
   "builds": [
     { "src": "api/**/*.js", "use": "@vercel/node" }
