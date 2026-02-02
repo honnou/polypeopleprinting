@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Shop 3D prints, DTF transfers, and custom products from Poly People Printing. Fast turnaround, competitive pricing, and quality craftsmanship.">
+    <title>Shop - Poly People Printing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        a:focus, button:focus {
+            outline: 3px solid #fbbf24 !important;
+            outline-offset: 2px !important;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #fbbf24;
+            color: #000;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+            font-weight: bold;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900 min-h-screen">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav role="navigation" aria-label="Main navigation" class="relative z-50 bg-white/10 backdrop-blur-md border-b-2 border-white/20">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-white" style="font-family: 'Fredoka', cursive;">
+                <a href="index.html" class="hover:text-yellow-300 transition-colors" aria-label="Poly People Printing home page">
+                    <span role="img" aria-label="Corgi mascot">🐕</span> Poly People Printing
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="index.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Home</a>
+                <a href="poly-services.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Services</a>
+                <a href="poly-shop.html" class="text-yellow-300 font-semibold" style="font-family: 'Quicksand', sans-serif;" aria-current="page">Shop</a>
+                <a href="poly-gallery.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Gallery</a>
+                <a href="poly-quote.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Get Quote</a>
+                <a href="poly-contact.html" class="text-white hover:text-yellow-300 transition-colors font-semibold" style="font-family: 'Quicksand', sans-serif;">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="container mx-auto px-4 py-16 text-center">
+        <h1 class="text-6xl md:text-7xl font-black text-white mb-6 float-animation" style="font-family: 'Fredoka', cursive; text-shadow: 0 0 30px rgba(255,255,255,0.6);">
+            Shop
+        </h1>
+        <p class="text-2xl text-purple-100 max-w-3xl mx-auto" style="font-family: 'Quicksand', sans-serif;">
+            Browse our products and order directly. Need something custom? <a href="poly-quote.html" class="text-yellow-300 hover:text-yellow-200 underline">Request a quote</a> instead!
+        </p>
+    </header>
+
+    <!-- Shop Content -->
+    <main id="main-content" role="main" class="container mx-auto px-4 pb-20">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- Products Section -->
+            <section aria-labelledby="products-heading" class="mb-16">
+                <h2 id="products-heading" class="text-4xl font-black text-white mb-8 text-center" style="font-family: 'Fredoka', cursive;">
+                    Our Products
+                </h2>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Service Product -->
+                    <article class="bg-white/10 backdrop-blur-md rounded-3xl p-8 border-2 border-white/20 hover:border-purple-400 transition-all duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-4" style="font-family: 'Fredoka', cursive;">Service</h3>
+                        <p class="text-purple-100 mb-6" style="font-family: 'Quicksand', sans-serif;">
+                            General service offering from Poly People Printing.
+                        </p>
+                        <div id="product-component-1770017032456"></div>
+                    </article>
+
+                    <!-- Placeholder cards for upcoming products -->
+                    <article class="bg-white/5 backdrop-blur-md rounded-3xl p-8 border-2 border-dashed border-white/20 flex flex-col items-center justify-center text-center">
+                        <div class="text-6xl mb-4" role="img" aria-label="3D printer">🖨️</div>
+                        <h3 class="text-2xl font-bold text-white mb-2" style="font-family: 'Fredoka', cursive;">3D Prints</h3>
+                        <p class="text-purple-200" style="font-family: 'Quicksand', sans-serif;">Coming soon!</p>
+                    </article>
+
+                    <article class="bg-white/5 backdrop-blur-md rounded-3xl p-8 border-2 border-dashed border-white/20 flex flex-col items-center justify-center text-center">
+                        <div class="text-6xl mb-4" role="img" aria-label="T-shirt">👕</div>
+                        <h3 class="text-2xl font-bold text-white mb-2" style="font-family: 'Fredoka', cursive;">DTF Transfers</h3>
+                        <p class="text-purple-200" style="font-family: 'Quicksand', sans-serif;">Coming soon!</p>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Custom Order CTA -->
+            <section class="text-center">
+                <div class="inline-block bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 p-1 rounded-3xl">
+                    <div class="bg-purple-900 rounded-3xl px-12 py-8">
+                        <h2 class="text-4xl font-black text-white mb-4" style="font-family: 'Fredoka', cursive;">
+                            Need Something Custom?
+                        </h2>
+                        <p class="text-xl text-purple-100 mb-6" style="font-family: 'Quicksand', sans-serif;">
+                            We specialize in custom orders! Tell us about your project and we'll bring it to life.
+                        </p>
+                        <a href="poly-quote.html" class="inline-block bg-white text-purple-600 hover:bg-yellow-300 hover:text-purple-800 font-bold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-110 text-lg" style="font-family: 'Fredoka', cursive;" aria-label="Request a custom quote">
+                            Get a Custom Quote ✨
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer role="contentinfo" class="bg-black/30 backdrop-blur-md border-t-2 border-white/20 py-8 mt-20">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-white text-lg mb-2" style="font-family: 'Fredoka', cursive;">
+                <span role="img" aria-label="Rainbow">🌈</span> Poly People Printing - Punderful Perfection <span role="img" aria-label="Rainbow">🌈</span>
+            </p>
+            <p class="text-purple-200" style="font-family: 'Quicksand', sans-serif;">
+                © 2026 Poly People Printing. All rights reserved.
+            </p>
+            <p class="text-purple-300 text-sm mt-2">
+                <a href="poly-accessibility.html" class="hover:text-yellow-300 underline">Accessibility Statement</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Shopify Buy Button -->
+    <script type="text/javascript">
+    /*<![CDATA[*/
+    (function () {
+      var scriptURL = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+      if (window.ShopifyBuy) {
+        if (window.ShopifyBuy.UI) {
+          ShopifyBuyInit();
+        } else {
+          loadScript();
+        }
+      } else {
+        loadScript();
+      }
+      function loadScript() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = scriptURL;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(script);
+        script.onload = ShopifyBuyInit;
+      }
+      function ShopifyBuyInit() {
+        var client = ShopifyBuy.buildClient({
+          domain: 'mz1anh-tt.myshopify.com',
+          storefrontAccessToken: '2ea75fda276d94cb98d535bb9836f673',
+        });
+        ShopifyBuy.UI.onReady(client).then(function (ui) {
+          ui.createComponent('product', {
+            id: '9248080756965',
+            node: document.getElementById('product-component-1770017032456'),
+            moneyFormat: '%24%7B%7Bamount%7D%7D',
+            options: {
+  "product": {
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "100%",
+          "margin-left": "0px",
+          "margin-bottom": "0px"
+        }
+      },
+      "button": {
+        "font-family": "Quicksand, sans-serif",
+        "font-weight": "600",
+        "border-radius": "9999px",
+        ":hover": {
+          "background-color": "#7d53dd"
+        },
+        "background-color": "#8b5cf6",
+        ":focus": {
+          "background-color": "#7d53dd"
+        }
+      }
+    },
+    "contents": {
+      "img": false,
+      "button": false,
+      "buttonWithQuantity": true,
+      "title": false,
+      "price": false
+    },
+    "text": {
+      "button": "Add to cart"
+    }
+  },
+  "productSet": {
+    "styles": {
+      "products": {
+        "@media (min-width: 601px)": {
+          "margin-left": "-20px"
+        }
+      }
+    }
+  },
+  "modalProduct": {
+    "contents": {
+      "img": false,
+      "imgWithCarousel": true,
+      "button": false,
+      "buttonWithQuantity": true
+    },
+    "styles": {
+      "product": {
+        "@media (min-width: 601px)": {
+          "max-width": "100%",
+          "margin-left": "0px",
+          "margin-bottom": "0px"
+        }
+      },
+      "button": {
+        "font-family": "Quicksand, sans-serif",
+        "font-weight": "600",
+        "border-radius": "9999px",
+        ":hover": {
+          "background-color": "#7d53dd"
+        },
+        "background-color": "#8b5cf6",
+        ":focus": {
+          "background-color": "#7d53dd"
+        }
+      }
+    },
+    "text": {
+      "button": "Add to cart"
+    }
+  },
+  "option": {},
+  "cart": {
+    "styles": {
+      "button": {
+        "font-family": "Quicksand, sans-serif",
+        "font-weight": "600",
+        "border-radius": "9999px",
+        ":hover": {
+          "background-color": "#7d53dd"
+        },
+        "background-color": "#8b5cf6",
+        ":focus": {
+          "background-color": "#7d53dd"
+        }
+      }
+    },
+    "text": {
+      "total": "Subtotal",
+      "button": "Checkout"
+    },
+    "popup": false
+  },
+  "toggle": {
+    "styles": {
+      "toggle": {
+        "font-family": "Quicksand, sans-serif",
+        "font-weight": "600",
+        "background-color": "#8b5cf6",
+        ":hover": {
+          "background-color": "#7d53dd"
+        },
+        ":focus": {
+          "background-color": "#7d53dd"
+        }
+      }
+    }
+  }
+},
+          });
+        });
+      }
+    })();
+    /*]]>*/
+    </script>
+</body>
+</html>
