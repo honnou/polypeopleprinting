@@ -149,7 +149,7 @@
                         <h2 id="contact-form-heading" class="text-3xl font-black text-white mb-6" style="font-family: 'Fredoka', cursive;">
                             Quick Message
                         </h2>
-                        <form class="space-y-4" aria-label="Contact form">
+                        <form id="contact-form" class="space-y-4" aria-label="Contact form">
                             <div>
                                 <label for="name" class="block text-white font-bold mb-2" style="font-family: 'Quicksand', sans-serif;">
                                     Name <span class="text-yellow-300">*</span>
@@ -221,5 +221,45 @@
             </p>
         </div>
     </footer>
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            try {
+                const response = await fetch('/api/contact-submission', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    this.reset();
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span role="img" aria-hidden="true">📬</span> Send Message';
+                    alert('Message sent! We\'ll respond within 24 hours.');
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                console.error('Contact form error:', error);
+                alert('Error sending message. Please email hello@polypeopleprinting.com directly.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span role="img" aria-hidden="true">📬</span> Send Message';
+            }
+        });
+    </script>
 </body>
 </html>

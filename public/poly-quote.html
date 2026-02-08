@@ -528,41 +528,52 @@
                 return;
             }
 
+            // Collect form data
+            const formData = {
+                service: document.querySelector('input[name="service"]:checked')?.value,
+                quantity: document.getElementById('quantity').value,
+                timeline: document.getElementById('timeline').value,
+                dimensions: document.getElementById('dimensions').value,
+                materials: document.getElementById('materials').value,
+                budget: document.getElementById('budget').value,
+                description: document.getElementById('description').value,
+                referral: document.getElementById('referral').value,
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                contactMethod: document.getElementById('contactMethod').value,
+                newsletter: document.getElementById('newsletter').checked
+            };
+
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-
-            const formData = new FormData(this);
-            const data = {};
-            formData.forEach((value, key) => {
-                if (key === 'files') return; // skip file inputs
-                data[key] = value;
-            });
-            // Convert newsletter checkbox to boolean
-            data.newsletter = formData.has('newsletter');
+            submitBtn.textContent = 'Sending...';
 
             try {
-                const res = await fetch('/api/webhooks/new-order.js', {
+                const response = await fetch('/api/quote-submission', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data),
+                    body: JSON.stringify(formData)
                 });
 
-                if (!res.ok) {
-                    const err = await res.json().catch(() => ({}));
-                    throw new Error(err.error || 'Submission failed');
-                }
+                const result = await response.json();
 
-                // Hide form, show success message
-                this.style.display = 'none';
-                document.querySelector('.flex.justify-between.mt-8').style.display = 'none';
-                const successMessage = document.getElementById('successMessage');
-                successMessage.classList.remove('hidden');
-                successMessage.focus();
-                announceToScreenReader('Quote request submitted successfully! We will contact you within 24 hours.');
-            } catch (err) {
+                if (response.ok && result.success) {
+                    // Hide form, show success message
+                    document.getElementById('quoteForm').style.display = 'none';
+                    document.querySelector('.flex.justify-between.mt-8').style.display = 'none';
+                    const successMessage = document.getElementById('successMessage');
+                    successMessage.classList.remove('hidden');
+                    successMessage.focus();
+                    announceToScreenReader('Quote request submitted successfully! We will contact you within 24 hours.');
+                } else {
+                    throw new Error(result.error || 'Submission failed');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
                 announceToScreenReader('Error submitting form. Please try again.');
-                alert('Something went wrong: ' + err.message + '. Please try again or contact us directly.');
+                alert('Sorry, there was an error submitting your quote. Please try again or email us at quotes@polypeopleprinting.com');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Quote Request ✨';
             }
