@@ -166,6 +166,41 @@ function generateQuoteConfirmationEmail(data) {
 }
 
 // ---------------------------------------------------------------------------
+// Admin fallback email template
+// ---------------------------------------------------------------------------
+function generateAdminFallbackEmail(formType, data, labels) {
+  const rows = Object.entries(data)
+    .map(([key, val]) => `<tr><td style="padding:6px 12px;font-weight:bold;border:1px solid #ddd;">${key}</td><td style="padding:6px 12px;border:1px solid #ddd;">${val}</td></tr>`)
+    .join("");
+
+  const labelRows = labels
+    ? Object.entries(labels)
+        .map(([key, val]) => `<tr><td style="padding:6px 12px;font-weight:bold;border:1px solid #ddd;">${key}</td><td style="padding:6px 12px;border:1px solid #ddd;">${val}</td></tr>`)
+        .join("")
+    : "";
+
+  return `<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+  <div style="background:#dc2626;color:white;padding:16px;border-radius:8px 8px 0 0;">
+    <h2 style="margin:0;">Discord Unavailable — ${formType} Fallback</h2>
+  </div>
+  <div style="background:#fef2f2;padding:20px;border-radius:0 0 8px 8px;border:1px solid #fca5a5;">
+    <p>Discord webhook delivery failed. This submission was <strong>not</strong> posted to Discord. Please process manually.</p>
+    <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+      ${rows}
+      ${labelRows}
+    </table>
+    <p style="margin-top:16px;color:#666;font-size:12px;">
+      This is an automated fallback from Poly People Printing's form system.<br>
+      Check Vercel function logs for additional details.
+    </p>
+  </div>
+</body>
+</html>`;
+}
+
+// ---------------------------------------------------------------------------
 // Handler
 // ---------------------------------------------------------------------------
 module.exports = async function handler(req, res) {
@@ -255,6 +290,7 @@ module.exports = async function handler(req, res) {
   const timelineLabel = TIMELINE_LABELS[data.timeline] || sanitizedData.timeline;
 
   // -- Send to Discord -----------------------------------------------------
+  let discordOk = false;
   const discordUrl = process.env.DISCORD_WEBHOOK_QUOTES || process.env.DISCORD_WEBHOOK_URL_ORDER;
   if (discordUrl) {
     const fields = [
@@ -301,20 +337,22 @@ module.exports = async function handler(req, res) {
 
     try {
       const discordResult = await postJSON(discordUrl, discordPayload);
-      if (discordResult.status < 200 || discordResult.status >= 300) {
+      if (discordResult.status >= 200 && discordResult.status < 300) {
+        discordOk = true;
+      } else {
         console.error(
           `Discord webhook failed: ${discordResult.status} — ${discordResult.body}`
         );
       }
     } catch (err) {
       console.error("Discord webhook error:", err.message);
-      // Continue — don't fail the customer experience
     }
   } else {
     console.error("No Discord webhook URL configured (DISCORD_WEBHOOK_QUOTES or DISCORD_WEBHOOK_URL_ORDER)");
   }
 
   // -- Send auto-reply email via SendGrid ----------------------------------
+  let sendgridOk = false;
   const sendgridKey = process.env.SENDGRID_API_KEY;
   if (sendgridKey) {
     const emailPayload = {
@@ -352,12 +390,63 @@ module.exports = async function handler(req, res) {
         emailPayload,
         { Authorization: `Bearer ${sendgridKey}` }
       );
-      if (emailResult.status >= 400) {
+      if (emailResult.status < 400) {
+        sendgridOk = true;
+      } else {
         console.error(`SendGrid failed: ${emailResult.status} — ${emailResult.body}`);
       }
     } catch (err) {
       console.error("SendGrid error:", err.message);
     }
+  }
+
+  // -- Admin fallback: email when Discord is down --------------------------
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!discordOk && adminEmail && sendgridKey) {
+    const adminPayload = {
+      personalizations: [
+        {
+          to: [{ email: adminEmail }],
+          subject: `[FALLBACK] New Quote Request from ${sanitizedData.firstName} ${sanitizedData.lastName}`,
+        },
+      ],
+      from: {
+        email: "quotes@polypeopleprinting.com",
+        name: "PPP System Alert",
+      },
+      content: [
+        {
+          type: "text/html",
+          value: generateAdminFallbackEmail("Quote Request", sanitizedData, {
+            service: serviceLabel,
+            timeline: timelineLabel,
+          }),
+        },
+      ],
+    };
+
+    try {
+      await postJSON(
+        "https://api.sendgrid.com/v3/mail/send",
+        adminPayload,
+        { Authorization: `Bearer ${sendgridKey}` }
+      );
+    } catch (err) {
+      console.error("Admin fallback email error:", err.message);
+    }
+  }
+
+  // -- Last resort: structured log for Vercel dashboard recovery -----------
+  if (!discordOk && !sendgridOk) {
+    console.error(
+      JSON.stringify({
+        _fallback: "SUBMISSION_RECOVERY",
+        type: "quote",
+        data: sanitizedData,
+        serviceLabel,
+        timelineLabel,
+      })
+    );
   }
 
   // -- Success response ----------------------------------------------------
